@@ -2,11 +2,16 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
+#include <errno.h>
 
-
+//Gibt parms ab argv[1] alle Parameter
 void pparameter(const char **argv, const char ** parms, int argc);
+
 void do_dir (const char * file_name, const char * const *parms);
 void do_file (const char * file_name, const char *const *parms, struct dirent *curstruct);
+
+//Errormessage: Bezieht sich auf errno.h und gibt Fehlerpfad aus
+void errmsg(int error_number, char *path);
 
 int main(int argc, const char * argv[]) {
 
@@ -76,4 +81,9 @@ void do_file (const char * file_name, const char *const *parms, struct dirent *c
     if (curstruct->d_type == 4) do_dir(file_name, parms);
 //    falls es sich bei dem aktuellen Eintrag um ein Directory handelt (d_type == 4) wird do_dir() mit dem aktuellsten Pfad aufgerufen
 
+}
+
+void errmsg(int error_number, char *path)
+{
+  fprintf(stderr, "myfind: %s\t%s ", strerror(error_number), path);
 }
